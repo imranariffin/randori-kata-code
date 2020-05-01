@@ -2,7 +2,7 @@ const request = require('supertest')
 
 const routes = require('app/routes')
 
-describe('api index', () => {
+describe('routes index', () => {
   test('root endpoint response', async () => {
     const response =  await request(routes)
       .get('/')
