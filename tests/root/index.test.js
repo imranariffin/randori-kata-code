@@ -1,9 +1,9 @@
 const request = require('supertest')
 
-const routes = require('app/routes')
+const routes = require('app')
 
-describe('routes index', () => {
-  test('root endpoint response', async () => {
+describe('root endpoint', () => {
+  test('response', async () => {
     const response =  await request(routes)
       .get('/')
       .send()

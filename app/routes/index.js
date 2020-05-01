@@ -1,11 +1,9 @@
-const express = require('express')
+const { Router } = require('express')
 
-const app = express()
+const router = Router()
 
-app.use(express.json())
-
-app.get('/', async (req, res) => {
+router.get('/', async (req, res) => {
   return res.json({})
 })
 
-module.exports = app
+module.exports = router
