@@ -6,9 +6,11 @@
   "author": "Imran Ariffin <ariffin.imran@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "start": "node index.js"
   },
   "dependencies": {
+    "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "socket.io": "^2.3.0"
   },
@@ -21,5 +23,7 @@
     "coveragePathIgnorePatterns": [
       "/node_modules/"
     ]
-  }
+  },
+  "private": true,
+  "workspaces": ["app"]
 }
