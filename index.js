@@ -1,24 +1,14 @@
-const app = require('express')()
-const http = require('http').createServer(app)
-const io = require('socket.io')(http)
+const config = require('dotenv').config()
+const http = require('http')
 
-app.get('/', (req, res) => {
-  res.sendFile(__dirname + '/index.html')
-})
+const app = require('app')
 
-io.on('connection', (socket) => {
-  console.log('User connected')
+if (config.error) {
+  throw config.error
+}
 
-  socket.on('disconnect', () => {
-    console.log('User disconnected')
-  })
+const httpServer = http.createServer(app)
 
-  socket.on('chat-message', (message) => {
-    console.log(message)
-    io.emit('chat-message', message)
-  })
-})
-
-http.listen(3000, () => {
-  console.log('Listening on *:3000')
+httpServer.listen(3000, () => {
+  console.log(`Listening on *:${3000}`)
 })
