@@ -28,6 +28,8 @@
         event.preventDefault();
         socket.emit('chat-message', $('#m').val());
         $('#m').val('');
+
+        console.log('?????')
         return false;
       });
 

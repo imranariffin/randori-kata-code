@@ -4,13 +4,10 @@ const io = require('socket.io')(http)
 
 const cors = require('cors')
 
-// app.get('/', (req, res) => {
-//   res.sendFile(__dirname + '/index.html')
-// })
+const { EventNames } = require('./app/code-sync/constants')
 
 corsOptions = {
   origin: 'http://localhost:8080',
-  // methods: ['GET']
 }
 
 const corsCallBack = (req, cb) => {
@@ -20,24 +17,53 @@ const corsCallBack = (req, cb) => {
 
 app.use(cors(corsCallBack))
 
-app.options('/test/cors', cors(corsCallBack))
-app.del('/test/cors', cors(corsCallBack), (req, res) => {
-  console.log(`Request: URL=${req.url}; method=${req.method}; headers=${JSON.stringify(req.headers)};`)
-  res.send('zzz')
-})
+const connections = {}
 
 io.on('connection', (socket) => {
-  console.log('User connected')
+  console.log('User connected, socketid =', socket.conn.id)
+  connections[socket.conn.id] = socket
+  console.log('Current users =', Object.keys(connections))
 
   socket.on('disconnect', () => {
-    console.log('User disconnected')
+    console.log(`User ${socket.conn.id} disconnected`)
+    delete connections[socket.conn.id]
   })
 
-  socket.on('chat-message', (message) => {
+  socket.on(EventNames.CodeSync, (message) => {
     console.log(message)
-    io.emit('chat-message', message)
+    io.emit(EventNames.CodeSync, message)
+  })
+
+  socket.error(error => {
+    console.log(error)
   })
 })
+
+;(() => {
+  let i = 0
+  setInterval(() => {
+    try {
+      if (Object.keys(connections).length <= 0) {
+        return
+      }
+      const sockets = [...Object.values(connections)]
+      i = (i + 1) % sockets.length
+      if (i >= sockets.length) {
+        return
+      }
+      if (sockets[i] === undefined) {
+        console.log('Connection', i, 'undefined')
+        return
+      }
+      console.log('i =', i)
+      const writer = sockets[i].conn.id
+      console.log(`${EventNames.WriterSwitch}, writer =`, writer)
+      io.emit(EventNames.WriterSwitch, { writer })
+    } catch (error) {
+      console.log(error)
+    }
+  }, 1000 * 3)
+})()
 
 http.listen(3000, () => {
   console.log('Listening on *:3000')
