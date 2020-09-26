@@ -1,0 +1,35 @@
+name: Dev Pull Request Workflow
+
+on:
+  pull_request:
+    branches:
+      - master
+
+env:
+  RANDORIKATA__ENV: dev-pr
+  RANDORIKATA__APP_NAME: randori-kata
+  RANDORIKATA__CODE__APP_NAME: randori-kata-code
+  RANDORIKATA__CODE__DROPLET_SIZE: s-1vcpu-1gb
+
+jobs:
+  setup_digital_ocean:
+    name: Setup Digital Ocean Dev-PR Infrastructure
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Install doctl
+        uses: digitalocean/action-doctl@v2
+        with:
+          token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+
+      - name: Checkout
+        uses: actions/checkout@v1
+
+      - name: Create Digital Ocean Dev-PR Project if not exists
+        run: ./scripts/do-create-project-if-not-exists.sh
+
+      - name: Create Digital Ocean Dev-PR Droplet if not exists
+        run: ./scripts/do-create-droplet-if-not-exists.sh
+
+      - name: Assign Digital Ocean Dev-PR Droplet to Dev Project
+        run: ./scripts/do-assign-droplet-to-project.sh
