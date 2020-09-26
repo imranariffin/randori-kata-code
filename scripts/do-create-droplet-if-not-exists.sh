@@ -8,8 +8,8 @@ echo "Checking if droplet '$DROPLET_NAME' already exists"
 EXISTS=`doctl compute droplet list \
  --format Name \
  --no-header \
- | grep $DROPLET_NAME \
- | uniq`
+  | grep "^$DROPLET_NAME$" \
+  | uniq`
 
 if [ -z "$EXISTS" ]
 then
