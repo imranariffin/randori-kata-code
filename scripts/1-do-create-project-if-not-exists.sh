@@ -1,4 +1,5 @@
-echo "Environment=$RANDORIKATA__ENV"
+echo "=========================================================="
+echo "Environment=$RANDORIKATA__ENV "$(pwd)/$(basename "$0")
 
 PROJECT_NAME=$RANDORIKATA__APP_NAME--$RANDORIKATA__ENV
 EXISTS=`doctl projects list \
@@ -10,7 +11,7 @@ EXISTS=`doctl projects list \
 echo "Checking if project '$PROJECT_NAME' already exists"
 if [ -z "$EXISTS" ]
 then
-  echo "Project '$PROJECT_NAME' not created. Creating"
+  echo "Project '$PROJECT_NAME' does not exist. Creating"
   doctl projects create \
     --name $PROJECT_NAME \
     --purpose "Manage real-time code-sharing"

@@ -1,4 +1,5 @@
-echo "Environment=$RANDORIKATA__ENV"
+echo "=========================================================="
+echo "Environment=$RANDORIKATA__ENV "$(pwd)/$(basename "$0")
 
 PROJECT_NAME=$RANDORIKATA__APP_NAME--$RANDORIKATA__ENV
 DROPLET_NAME=$RANDORIKATA__CODE__APP_NAME--$RANDORIKATA__ENV
