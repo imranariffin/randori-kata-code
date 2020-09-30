@@ -1,4 +1,5 @@
-echo "Environment=$RANDORIKATA__ENV"
+echo "=========================================================="
+echo "Environment=$RANDORIKATA__ENV "$(pwd)/$(basename "$0")
 
 ENV=$RANDORIKATA__ENV
 DROPLET_NAME=$RANDORIKATA__CODE__APP_NAME--$RANDORIKATA__ENV
@@ -13,7 +14,7 @@ EXISTS=`doctl compute droplet list \
 
 if [ -z "$EXISTS" ]
 then
-  echo "Droplet '$DROPLET_NAME' not created. Creating"
+  echo "Droplet '$DROPLET_NAME' does not exist. Creating"
   doctl compute droplet create \
     --image ubuntu-18-04-x64 \
     --size $DROPLET_SIZE \
