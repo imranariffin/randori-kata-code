@@ -44,7 +44,7 @@ jobs:
 
       - name: Waiting For Droplet To Be Ready for SSH
         run: |
-          WAIT_TIME=15
+          WAIT_TIME=30
           echo "Sleeping for $WAIT_TIME (s)"
           sleep $WAIT_TIME
 
