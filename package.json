@@ -6,6 +6,7 @@
   "author": "Imran Ariffin <ariffin.imran@gmail.com>",
   "license": "MIT",
   "scripts": {
+    "local": "nodemon index.js",
     "test": "jest"
   },
   "dependencies": {
