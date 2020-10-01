@@ -13,7 +13,7 @@ env:
 
 jobs:
   run_tests:
-    name: Setup Digital Ocean Infrastructure
+    name: Run Tests
     runs-on: ubuntu-latest
 
     steps:
