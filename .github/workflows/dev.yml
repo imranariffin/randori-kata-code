@@ -6,14 +6,14 @@ on:
       - master
 
 env:
-  RANDORIKATA__ENV: dev
   RANDORIKATA__APP_NAME: randori-kata
   RANDORIKATA__CODE__APP_NAME: randori-kata-code
   RANDORIKATA__CODE__DROPLET_SIZE: s-1vcpu-1gb
+  RANDORIKATA__ENV: dev
 
 jobs:
   setup_environment:
-    name: Setup Digital Ocean Dev-PR Infrastructure
+    name: Setup Digital Ocean Infrastructure
     runs-on: ubuntu-latest
 
     steps:
@@ -27,22 +27,25 @@ jobs:
         with:
           ref: ${{ env.GITHUB_REF }}
 
-      - name: Create Digital Ocean Dev Droplet If Not Exists
+      - name: NPM Install On Github Action
+        run: npm install .
+
+      - name: Run Tests
+        run: npm test
+
+      - name: Create Digital Ocean Droplet If Not Exists
         run: ./scripts/0-do-create-droplet-if-not-exists.sh
 
-      - name: Create Digital Ocean Dev Project If Not Exists
+      - name: Create Digital Ocean Project If Not Exists
         run: ./scripts/1-do-create-project-if-not-exists.sh
 
-      - name: Assign Digital Ocean Dev Droplet To Dev Project
+      - name: Assign Digital Ocean Droplet To Project
         run: ./scripts/2-do-assign-droplet-to-project.sh
 
       - name: Set Droplet Host Environment Variable
         run: ./scripts/3-do-set-droplet-host-env-var.sh
 
-      - name: Echo RANDORIKATA__CODE__DROPLET_HOST
-        run: echo "RANDORIKATA__CODE__DROPLET_HOST=${{ env.RANDORIKATA__CODE__DROPLET_HOST }}"
-
-      - name: Waiting For Droplet To Be Ready for SSH
+      - name: Waiting For Droplet To Be Ready For SSH
         run: |
           WAIT_TIME=30
           echo "Sleeping for $WAIT_TIME (s)"
@@ -73,3 +76,32 @@ jobs:
             git checkout $GIT_BRANCH
             git pull origin $GIT_BRANCH
             ./scripts/4-do-install-node-and-node-tools-if-not-installed.sh
+
+      - name: Collect All Required Environment Variables Into .env File
+        run: |
+          touch .env
+          printenv | grep RANDORIKATA__ | awk '{print "export " $0}' > ./.env
+
+      - name: Send .env File To Droplet Over SCP
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ env.RANDORIKATA__CODE__DROPLET_HOST }}
+          username: root
+          key: ${{ secrets.DIGITALOCEAN_SSH_KEY }}
+          port: 22
+          source: "./.env"
+          target: "/root/randori-kata-code/"
+
+      - name: Run App As A Daemon Service
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ env.RANDORIKATA__CODE__DROPLET_HOST }}
+          username: root
+          key: ${{ secrets.DIGITALOCEAN_SSH_KEY }}
+          port: 22
+          script: |
+            cd ./randori-kata-code
+            git status
+            source .env
+            export NODE_ENV=$RANDORIKATA__ENV
+            pm2 start index.js || pm2 restart --update-env index.js

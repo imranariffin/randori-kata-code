@@ -6,70 +6,26 @@ on:
       - master
 
 env:
-  RANDORIKATA__ENV: dev-pr
   RANDORIKATA__APP_NAME: randori-kata
   RANDORIKATA__CODE__APP_NAME: randori-kata-code
   RANDORIKATA__CODE__DROPLET_SIZE: s-1vcpu-1gb
+  RANDORIKATA__ENV: test
 
 jobs:
-  setup_environment:
-    name: Setup Digital Ocean Dev-PR Infrastructure
+  run_tests:
+    name: Run Tests
     runs-on: ubuntu-latest
 
     steps:
-      - name: Install doctl
-        uses: digitalocean/action-doctl@v2
-        with:
-          token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
-
       - name: Checkout
         uses: actions/checkout@v1
         with:
           ref: ${{ env.GITHUB_REF }}
 
-      - name: Create Digital Ocean Dev Droplet If Not Exists
-        run: ./scripts/0-do-create-droplet-if-not-exists.sh
+      - name: NPM Install On Github Action
+        run: npm install .
 
-      - name: Create Digital Ocean Dev Project If Not Exists
-        run: ./scripts/1-do-create-project-if-not-exists.sh
-
-      - name: Assign Digital Ocean Dev Droplet To Dev Project
-        run: ./scripts/2-do-assign-droplet-to-project.sh
-
-      - name: Set Droplet Host Environment Variable
-        run: ./scripts/3-do-set-droplet-host-env-var.sh
-
-      - name: Echo RANDORIKATA__CODE__DROPLET_HOST
-        run: echo "RANDORIKATA__CODE__DROPLET_HOST=${{ env.RANDORIKATA__CODE__DROPLET_HOST }}"
-
-      - name: Waiting For Droplet To Be Ready for SSH
+      - name: Run Tests
         run: |
-          WAIT_TIME=30
-          echo "Sleeping for $WAIT_TIME (s)"
-          sleep $WAIT_TIME
-
-      - name: Git Clone Repo If Not Cloned
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ env.RANDORIKATA__CODE__DROPLET_HOST }}
-          username: root
-          key: ${{ secrets.DIGITALOCEAN_SSH_KEY }}
-          port: 22
-          script: |
-            git clone https://github.com/imranariffin/randori-kata-code.git || exit 0
-
-      - name: Install node & node Tools If Not Installed
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ env.RANDORIKATA__CODE__DROPLET_HOST }}
-          username: root
-          key: ${{ secrets.DIGITALOCEAN_SSH_KEY }}
-          port: 22
-          envs: GITHUB_HEAD_REF,RANDORIKATA__ENV
-          script: |
-            cd ./randori-kata-code
-            git fetch origin
-            GIT_BRANCH=$(echo $GITHUB_HEAD_REF | cut -d'/' -f3-)
-            git checkout $GIT_BRANCH
-            git pull origin $GIT_BRANCH
-            ./scripts/4-do-install-node-and-node-tools-if-not-installed.sh
+          export NODE_ENV=$RANDORIKATA__ENV
+          npm test
