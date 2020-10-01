@@ -27,6 +27,12 @@ jobs:
         with:
           ref: ${{ env.GITHUB_REF }}
 
+      - name: NPM Install On Github Action
+        run: npm install .
+
+      - name: Run Tests
+        run: npm test
+
       - name: Create Digital Ocean Droplet If Not Exists
         run: ./scripts/0-do-create-droplet-if-not-exists.sh
 
@@ -85,6 +91,3 @@ jobs:
           port: 22
           source: "./.env"
           target: "/root/randori-kata-code/"
-
-      - name: Run Tests
-        run: npm test
