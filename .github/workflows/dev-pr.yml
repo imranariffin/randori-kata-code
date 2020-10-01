@@ -86,16 +86,5 @@ jobs:
           source: "./.env"
           target: "/root/randori-kata-code/"
 
-      - name: Run App As A Daemon Service
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ env.RANDORIKATA__CODE__DROPLET_HOST }}
-          username: root
-          key: ${{ secrets.DIGITALOCEAN_SSH_KEY }}
-          port: 22
-          script: |
-            cd ./randori-kata-code
-            git status
-            source .env
-            export NODE_ENV=$RANDORIKATA__ENV
-            pm2 start index.js || pm2 restart --update-env index.js
+      - name: Run Tests
+        run: npm test

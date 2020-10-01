@@ -86,6 +86,9 @@ jobs:
           source: "./.env"
           target: "/root/randori-kata-code/"
 
+      - name: Run Tests
+        run: npm test
+
       - name: Run App As A Daemon Service
         uses: appleboy/ssh-action@master
         with:
