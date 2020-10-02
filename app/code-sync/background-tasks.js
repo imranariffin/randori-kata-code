@@ -1,15 +1,15 @@
 const path = require('path')
 
 const { EventNames } = require('./constants')
-const logging = require('../logging')
+const { getLogger } = require('../logging')
 
 const SWITCH_PERIOD_MS = process.env.RANDORIKATA__CODE__SWITCH_PERIOD_MS
-const logger = logging.getLogger(path.basename(__filename))
+const logger = getLogger(path.basename(__filename))
 
 const switchWriter = (io, connections) => {
   let i = 0
   logger.info(`Starting task to switch writer every ${SWITCH_PERIOD_MS / 1000} seconds`)
-  setInterval(() => {
+  const taskId = setInterval(() => {
     try {
       if (Object.keys(connections).length <= 0) {
         return
@@ -30,6 +30,10 @@ const switchWriter = (io, connections) => {
       logger.error(error)
     }
   }, SWITCH_PERIOD_MS)
+
+  return {
+    taskId
+  }
 }
 
 module.exports = {
