@@ -77,9 +77,9 @@ jobs:
           script: |
             cd ./randori-kata-code
             git fetch origin
-            GIT_BRANCH=$(echo $GITHUB_REF | cut -d'/' -f3-)
-            git checkout $GIT_BRANCH
-            git pull origin $GIT_BRANCH
+            git checkout master
+            git pull origin master
+            git status
             ./scripts/4-do-install-node-and-node-tools-if-not-installed.sh
 
       - name: Collect All Required Environment Variables Into .env File
