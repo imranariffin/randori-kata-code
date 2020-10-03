@@ -1,6 +1,6 @@
 const path = require('path')
 
-const { EventNames } = require('./constants')
+const { EventNames } = require('./event-names')
 const { getLogger } = require('../logging')
 const { Env } = require('../envs')
 

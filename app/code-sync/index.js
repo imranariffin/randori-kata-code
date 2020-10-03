@@ -2,7 +2,7 @@ const path = require('path')
 
 const { getLogger } = require('../logging')
 
-const { EventNames } = require('./constants')
+const { EventNames } = require('./event-names')
 const { switchWriter } = require('./background-tasks')
 
 const logger = getLogger(path.basename(__filename))
