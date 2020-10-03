@@ -27,10 +27,12 @@ describe('background-tasks', () => {
     jest.advanceTimersByTime(Env.CODE__SWITCH_PERIOD_MS)
 
     expect(io.emit).toHaveBeenCalledTimes(1)
+    expect(io.emit).toHaveBeenCalledWith("writer-switch", {"writer": "some-connection-id-0"})
 
     jest.advanceTimersByTime(Env.CODE__SWITCH_PERIOD_MS)
 
     expect(io.emit).toHaveBeenCalledTimes(2)
+    expect(io.emit).toHaveBeenCalledWith("writer-switch", {"writer": "some-connection-id-0"})
 
     clearInterval(taskId)
   })
