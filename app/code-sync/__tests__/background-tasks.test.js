@@ -1,4 +1,5 @@
 const { switchWriter } = require('../background-tasks')
+const { Env } = require('../../envs')
 
 describe('background-tasks', () => {
   let connections
@@ -23,9 +24,13 @@ describe('background-tasks', () => {
 
     expect(io.emit).toHaveBeenCalledTimes(0)
 
-    jest.advanceTimersByTime(process.env.RANDORIKATA__CODE__SWITCH_PERIOD_MS)
+    jest.advanceTimersByTime(Env.CODE__SWITCH_PERIOD_MS)
 
     expect(io.emit).toHaveBeenCalledTimes(1)
+
+    jest.advanceTimersByTime(Env.CODE__SWITCH_PERIOD_MS)
+
+    expect(io.emit).toHaveBeenCalledTimes(2)
 
     clearInterval(taskId)
   })
