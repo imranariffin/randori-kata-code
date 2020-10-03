@@ -78,7 +78,8 @@ jobs:
             cd ./randori-kata-code
             git fetch origin
             git checkout master
-            git pull origin master
+            git status
+            git reset --hard origin/master
             git status
             ./scripts/4-do-install-node-and-node-tools-if-not-installed.sh
 
