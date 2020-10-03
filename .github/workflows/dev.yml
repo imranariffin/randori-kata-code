@@ -11,7 +11,7 @@ env:
   RANDORIKATA__CODE__DROPLET_SIZE: s-1vcpu-1gb
   RANDORIKATA__CODE__SWITCH_PERIOD_MS: 60000
   RANDORIKATA__CODE__LOGGING_ENABLED: true
-  RANDORIKATA__CORS_ORIGIN_WHITELIST: ^http://localhost:.*$,^https://randorikata.com$
+  RANDORIKATA__CORS_ORIGIN_WHITELIST: ^http://localhost:.*$,^http(s)?://(www\.)?randorikata.com$
   RANDORIKATA__ENV: dev
   RANDORIKATA__PORT: 80
 
