@@ -9,9 +9,29 @@ env:
   RANDORIKATA__APP_NAME: randori-kata
   RANDORIKATA__CODE__APP_NAME: randori-kata-code
   RANDORIKATA__CODE__DROPLET_SIZE: s-1vcpu-1gb
+  RANDORIKATA__CODE__SWITCH_PERIOD_MS: 60000
+  RANDORIKATA__CODE__LOGGING_ENABLED: false
   RANDORIKATA__ENV: test
 
 jobs:
+  run_linters:
+    name: Run Linters
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+        with:
+          ref: ${{ env.GITHUB_REF }}
+
+      - name: NPM Install On Github Action
+        run: npm install .
+
+      - name: Run Linters
+        run: |
+          export NODE_ENV=$RANDORIKATA__ENV
+          npm run lint
+
   run_tests:
     name: Run Tests
     runs-on: ubuntu-latest
@@ -28,4 +48,4 @@ jobs:
       - name: Run Tests
         run: |
           export NODE_ENV=$RANDORIKATA__ENV
-          npm test
+          npm run test -- --coverage true --ci true --verbose true

@@ -9,6 +9,8 @@ env:
   RANDORIKATA__APP_NAME: randori-kata
   RANDORIKATA__CODE__APP_NAME: randori-kata-code
   RANDORIKATA__CODE__DROPLET_SIZE: s-1vcpu-1gb
+  RANDORIKATA__CODE__SWITCH_PERIOD_MS: 60000
+  RANDORIKATA__CODE__LOGGING_ENABLED: true
   RANDORIKATA__ENV: dev
 
 jobs:
@@ -31,7 +33,10 @@ jobs:
         run: npm install .
 
       - name: Run Tests
-        run: npm test
+        run: npm run test
+
+      - name: Run Linters
+        run: npm run lint
 
       - name: Create Digital Ocean Droplet If Not Exists
         run: ./scripts/0-do-create-droplet-if-not-exists.sh

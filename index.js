@@ -1,24 +1,25 @@
-const app = require('express')()
-const http = require('http').createServer(app)
-const io = require('socket.io')(http)
+const path = require('path')
 
-app.get('/', (req, res) => {
-  res.sendFile(__dirname + '/index.html')
-})
+const cors = require('cors')
+const express = require('express')
+const http = require('http')
+const socketIO = require('socket.io')
 
-io.on('connection', (socket) => {
-  console.log('User connected')
+const { init: initCodeSync } = require('./app/code-sync')
+const { getLogger } = require('./app/logging')
 
-  socket.on('disconnect', () => {
-    console.log('User disconnected')
-  })
+const app = express()
+const httpServer = http.createServer(app)
+const io = socketIO(httpServer)
+const logger = getLogger(path.basename(__filename))
 
-  socket.on('chat-message', (message) => {
-    console.log(message)
-    io.emit('chat-message', message)
-  })
-})
+const corsOptions = {
+  origin: ['http://localhost:8080'],
+}
+app.use(cors(corsOptions))
 
-http.listen(3000, () => {
-  console.log('Listening on *:3000')
+initCodeSync(io)
+
+httpServer.listen(3000, () => {
+  logger.info('Listening on *:3000')
 })
