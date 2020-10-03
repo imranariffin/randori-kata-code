@@ -1,3 +1,7 @@
+const { Env } = require('../envs')
+
+const LOGGING_ENABLED = Env.CODE__LOGGING_ENABLED
+
 const LOG_LEVELS = {
   FATAL: 'FATAL',
   ERROR: 'ERROR',
@@ -7,6 +11,9 @@ const LOG_LEVELS = {
 }
 
 const _log = (logLevel, ...args) => {
+  if (!LOGGING_ENABLED) {
+    return
+  }
   const timestamp = `[${new Date().toISOString()}]`
   console.log(timestamp, `[${logLevel}]`, ...args)
 }

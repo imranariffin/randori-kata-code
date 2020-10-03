@@ -2,8 +2,9 @@ const path = require('path')
 
 const { EventNames } = require('./constants')
 const { getLogger } = require('../logging')
+const { Env } = require('../envs')
 
-const SWITCH_PERIOD_MS = process.env.RANDORIKATA__CODE__SWITCH_PERIOD_MS
+const SWITCH_PERIOD_MS = Env.CODE__SWITCH_PERIOD_MS
 const logger = getLogger(path.basename(__filename))
 
 const switchWriter = (io, connections) => {
