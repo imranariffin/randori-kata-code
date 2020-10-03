@@ -16,5 +16,6 @@ module.exports = {
     CODE__LOGGING_ENABLED: StringToBoolean(process.env.RANDORIKATA__CODE__LOGGING_ENABLED),
     CODE__SWITCH_PERIOD_MS: Number(process.env.RANDORIKATA__CODE__SWITCH_PERIOD_MS),
     ENV: process.env.RANDORIKATA__ENV,
+    PORT: Number(process.env.RANDORIKATA__PORT),
   },
 }

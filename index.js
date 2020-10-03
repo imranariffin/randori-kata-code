@@ -7,6 +7,7 @@ const socketIO = require('socket.io')
 
 const { init: initCodeSync } = require('./app/code-sync')
 const { getLogger } = require('./app/logging')
+const { Env } = require('./app/envs')
 
 const app = express()
 const httpServer = http.createServer(app)
@@ -20,6 +21,6 @@ app.use(cors(corsOptions))
 
 initCodeSync(io)
 
-httpServer.listen(3000, () => {
-  logger.info('Listening on *:3000')
+httpServer.listen(Env.PORT, () => {
+  logger.info(`Listening on *:${Env.PORT}`)
 })
