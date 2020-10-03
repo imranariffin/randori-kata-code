@@ -10,6 +10,7 @@ env:
   RANDORIKATA__CODE__APP_NAME: randori-kata-code
   RANDORIKATA__CODE__DROPLET_SIZE: s-1vcpu-1gb
   RANDORIKATA__ENV: test
+  RANDORIKATA__CODE__SWITCH_PERIOD_MS: 60000
 
 jobs:
   run_tests:
