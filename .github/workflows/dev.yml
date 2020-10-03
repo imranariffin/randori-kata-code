@@ -33,7 +33,10 @@ jobs:
         run: npm install .
 
       - name: Run Tests
-        run: npm test
+        run: npm run test
+
+      - name: Run Linters
+        run: npm run lint
 
       - name: Create Digital Ocean Droplet If Not Exists
         run: ./scripts/0-do-create-droplet-if-not-exists.sh
