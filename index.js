@@ -15,7 +15,7 @@ const io = socketIO(httpServer)
 const logger = getLogger(path.basename(__filename))
 
 const corsOptions = {
-  origin: ['http://localhost:8080'],
+  origin: Env.CORS_ORIGIN_WHITELIST,
 }
 app.use(cors(corsOptions))
 
