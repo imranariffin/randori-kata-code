@@ -12,4 +12,4 @@ DROPLET_HOST=`doctl compute droplet list \
   | uniq \
   | cut -d',' -f2`
 echo "::set-env name=RANDORIKATA__CODE__DROPLET_HOST::$DROPLET_HOST"
-echo "RANDORIKATA__CODE__DROPLET_HOST=$RANDORIKATA__CODE__DROPLET_HOST"
+echo "RANDORIKATA__CODE__DROPLET_HOST=$DROPLET_HOST"
